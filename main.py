@@ -1,5 +1,8 @@
 from flask import Flask, request, render_template, redirect, url_for, session
 from flask_socketio import SocketIO, join_room, leave_room, send
+import random
+from string import ascii_letters
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "supersecretkey"
