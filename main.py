@@ -12,7 +12,6 @@ socketio = SocketIO(app)
 rooms = {}
 
 
-# ...
 def generate_room_code(length: int, existing_codes: list[str]) -> str:
     while True:
         code_chars = [random.choice(ascii_letters) for _ in range(length)]
@@ -56,7 +55,6 @@ def home():
         return render_template("home.html")
 
 
-# ...
 @app.route("/room")
 def room():
     room = session.get("room")
@@ -65,10 +63,6 @@ def room():
         return redirect(url_for("home"))
     messages = rooms[room]["messages"]
     return render_template("room.html", room=room, user=name, messages=messages)
-
-
-# TODO: Build the SocketIO event handlers
-...
 
 
 @socketio.on("connect")
@@ -84,11 +78,6 @@ def handle_connect():
     rooms[room]["members"] += 1
 
 
-...
-
-...
-
-
 @socketio.on("message")
 def handle_message(payload):
     room = session.get("room")
@@ -98,11 +87,6 @@ def handle_message(payload):
     message = {"sender": name, "message": payload["message"]}
     send(message, to=room)
     rooms[room]["messages"].append(message)
-
-
-...
-
-...
 
 
 @socketio.on("disconnect")
@@ -116,8 +100,6 @@ def handle_disconnect():
             del rooms[room]
         send({"message": f"{name} has left the chat", "sender": ""}, to=room)
 
-
-...
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)
